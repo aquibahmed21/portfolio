@@ -1,9 +1,9 @@
-export function setupHome(element: HTMLDivElement) {
+export function setupHome(element: HTMLButtonElement | null, previousSibling: HTMLDivElement) {
   let counter = 0
   const setCounter = (count: number) => {
     counter = count
-		element.innerHTML = "Aquib Tabish" + ": " +counter;
+		previousSibling.innerHTML = "Aquib Tabish" + ": " +counter;
   }
-  element.addEventListener('click', () => setCounter(counter + 1))
+  element?.addEventListener('click', () => setCounter(counter + 1))
   setCounter(0)
 }
