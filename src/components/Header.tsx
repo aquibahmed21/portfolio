@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import kitecite from '../images/kitecite.svg';
 
 const Header = () =>
 {
@@ -39,7 +40,7 @@ const Header = () =>
         <div className="flex items-center justify-between">
           <a href="#home" className="text-2xl font-bold text-gray-800 flex items-center">
             <img
-              src="../src/images/kitecite.svg"
+              src={ kitecite }
               alt={ "Kitecite" }
               className="w-8 h-8 mr-2 inline"
             />
