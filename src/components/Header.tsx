@@ -38,11 +38,11 @@ const Header = () =>
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <a href="#home" className="text-2xl font-bold text-gray-800 flex items-center">
-            {/* <img
+            <img
               src="../src/images/kitecite.svg"
               alt={ "Kitecite" }
               className="w-8 h-8 mr-2 inline"
-            /> */}
+            />
             <span className="inline">Kitecite</span>
           </a>
 
