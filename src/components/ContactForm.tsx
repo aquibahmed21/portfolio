@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+const WEB3FORMS_ACCESS_KEY = "37ed1dab-97de-4556-a08b-2f18a3b28172";
+
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -7,10 +9,32 @@ const ContactForm = () => {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
     // Handle form submission
-    console.log('Form submitted:', formData);
+    e.preventDefault();
+    // setFormData("Sending....");
+    const formData = new FormData(e.target as HTMLFormElement);
+
+    formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // setResult("Form Submitted Successfully");
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+      });
+    } else {
+      console.log("Error", data);
+      // setResult(data.message);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -21,7 +45,7 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={ handleSubmit } className="space-y-6">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
           Name

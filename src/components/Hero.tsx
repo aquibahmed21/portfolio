@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Github, Download } from 'lucide-react';
 import TypingAnimation from './TypingAnimation';
+import Resume from '././../assets/Aquib_Ahmed_Senior_Software_Engineer.pdf';
 
 const Hero = () => {
 
@@ -16,7 +17,7 @@ const Hero = () => {
           </h2>
           <p className="text-xl text-gray-600 mb-12 leading-relaxed">
             I craft beautiful, responsive, and user-friendly websites
-            <br className="hidden md:block" />
+            <br className="md:block" />
             using modern technologies and best practices.
           </p>
 
@@ -38,7 +39,7 @@ const Hero = () => {
               GitHub Profile
             </a>
             <a
-              href="/resume.pdf"
+              href={Resume}
               download
               className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-full flex items-center gap-2 hover:border-blue-500 hover:text-blue-500 transition-colors"
             >
