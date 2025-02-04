@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Define a glassomorphic gradient variable */
+  --glass-gradient: linear-gradient(145deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
+}
+
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -31,4 +36,14 @@ body {
   to {
     visibility: hidden;
   }
+}
+
+#particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: rgba(0, 0, 0, 0.1);
 }
