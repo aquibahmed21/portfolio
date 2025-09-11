@@ -9,11 +9,20 @@ const Header = () =>
 
   useEffect(() =>
   {
+    let ticking = false;
     const handleScroll = () =>
     {
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const currentProgress = (window.scrollY / totalScroll) * 100;
-      setScrollProgress(currentProgress);
+      if (!ticking)
+      {
+        window.requestAnimationFrame(() =>
+        {
+          const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const currentProgress = (window.scrollY / totalScroll) * 100;
+          setScrollProgress(currentProgress);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll);

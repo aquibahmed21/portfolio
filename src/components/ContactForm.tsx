@@ -8,33 +8,39 @@ const ContactForm = () => {
     email: '',
     message: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     // Handle form submission
     e.preventDefault();
-    // setFormData("Sending....");
-    const formData = new FormData(e.target as HTMLFormElement);
+    setLoading(true);
+    setResult(null);
+    const formDataObj = new FormData(e.target as HTMLFormElement);
 
-    formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+    formDataObj.append("access_key", WEB3FORMS_ACCESS_KEY);
 
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      // setResult("Form Submitted Successfully");
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formDataObj
       });
-    } else {
-      console.log("Error", data);
-      // setResult(data.message);
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        setFormData({
+          name: '',
+          email: '',
+          message: '',
+        });
+      } else {
+        setResult(data.message || "Submission failed");
+      }
+    } catch (error) {
+      setResult("Network error. Please try again.");
     }
+    setLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,9 +97,11 @@ const ContactForm = () => {
       <button
         type="submit"
         className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        disabled={loading}
       >
-        Send Message
+        {loading ? "Sending..." : "Send Message"}
       </button>
+      {result && <p className="text-center text-sm mt-2">{result}</p>}
     </form>
   );
 }

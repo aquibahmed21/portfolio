@@ -19,6 +19,7 @@ const Hero: React.FC = () => {
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      initParticles(); // Re-initialize particles on resize
     };
 
     class Particle {
