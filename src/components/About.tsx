@@ -27,8 +27,12 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <img
-              src="https://images.unsplash.com/photo-1544256718-3bcf237f3974?auto=format&fit=crop&q=80&w=800"
+              src="https://images.unsplash.com/photo-1544256718-3bcf237f3974?auto=format&fit=crop&q=80&w=640"
               alt="Developer working"
+              width={640}
+              height={427}
+              loading="lazy"
+              decoding="async"
               className="rounded-lg shadow-lg"
             />
           </div>

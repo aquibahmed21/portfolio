@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const WEB3FORMS_ACCESS_KEY = "37ed1dab-97de-4556-a08b-2f18a3b28172";
+const STATUS_DISPLAY_DURATION = 4000;
+
+interface SubmitStatus {
+  type: 'success' | 'error';
+  message: string;
+}
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -9,13 +15,19 @@ const ContactForm = () => {
     message: '',
   });
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [status, setStatus] = useState<SubmitStatus | null>(null);
+
+  useEffect(() => {
+    if (!status) return;
+    const timeout = setTimeout(() => setStatus(null), STATUS_DISPLAY_DURATION);
+    return () => clearTimeout(timeout);
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     // Handle form submission
     e.preventDefault();
     setLoading(true);
-    setResult(null);
+    setStatus(null);
     const formDataObj = new FormData(e.target as HTMLFormElement);
 
     formDataObj.append("access_key", WEB3FORMS_ACCESS_KEY);
@@ -28,17 +40,17 @@ const ContactForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        setResult("Form Submitted Successfully");
+        setStatus({ type: 'success', message: "Thanks for reaching out! I'll get back to you soon." });
         setFormData({
           name: '',
           email: '',
           message: '',
         });
       } else {
-        setResult(data.message || "Submission failed");
+        setStatus({ type: 'error', message: data.message || "Something went wrong. Please try again." });
       }
     } catch (error) {
-      setResult("Network error. Please try again.");
+      setStatus({ type: 'error', message: "Network error. Please try again." });
     }
     setLoading(false);
   };
@@ -101,7 +113,15 @@ const ContactForm = () => {
       >
         {loading ? "Sending..." : "Send Message"}
       </button>
-      {result && <p className="text-center text-sm mt-2">{result}</p>}
+      {status && (
+        <p
+          className={`text-center text-sm mt-2 ${
+            status.type === 'success' ? 'text-green-600' : 'text-red-600'
+          }`}
+        >
+          {status.message}
+        </p>
+      )}
     </form>
   );
 }

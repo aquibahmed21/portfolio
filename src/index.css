@@ -24,20 +24,6 @@ body {
   @apply text-gray-800 antialiased;
 }
 
-.blinking-cursor {
-  display: inline-block;
-  width: 1px;
-  background-color: black;
-  margin-left: 2px;
-  animation: blink 1s steps(2, start) infinite;
-}
-
-@keyframes blink {
-  to {
-    visibility: hidden;
-  }
-}
-
 #particle-canvas {
   position: absolute;
   top: 0;

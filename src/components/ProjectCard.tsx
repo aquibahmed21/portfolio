@@ -17,7 +17,10 @@ const ProjectCard = ({ title, description, image, tags, githubUrl, liveUrl }: Pr
         <img
           src={image}
           alt={title}
+          width={500}
+          height={192}
           loading="lazy"
+          decoding="async"
           className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-300"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">

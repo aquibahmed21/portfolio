@@ -10,16 +10,30 @@ const Hero: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const ctx = canvas.getContext("2d", { alpha: true }) as CanvasRenderingContext2D;
     if (!ctx) return;
 
     let particles: Particle[] = [];
-    const particleCount = 100;
+    let animationId: number;
+    let isVisible = true;
+
+    const getParticleCount = () =>
+      Math.min(100, Math.round((window.innerWidth * window.innerHeight) / 12000));
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       initParticles(); // Re-initialize particles on resize
+    };
+
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 150);
     };
 
     class Particle {
@@ -57,27 +71,40 @@ const Hero: React.FC = () => {
 
     const initParticles = () => {
       particles = [];
+      const particleCount = getParticleCount();
       for (let i = 0; i < particleCount; i++) {
         particles.push(new Particle());
       }
     };
 
     const animateParticles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((particle) => {
-        particle.update();
-        particle.draw();
-      });
-      requestAnimationFrame(animateParticles);
+      if (isVisible) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((particle) => {
+          particle.update();
+          particle.draw();
+        });
+      }
+      animationId = requestAnimationFrame(animateParticles);
     };
 
-    window.addEventListener("resize", resizeCanvas);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
+    window.addEventListener("resize", handleResize);
     resizeCanvas();
-    initParticles();
     animateParticles();
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
+      cancelAnimationFrame(animationId);
+      observer.disconnect();
     };
   }, []);
 
